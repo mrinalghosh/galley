@@ -5,6 +5,8 @@ import { ChevronRightIcon, TerminalIcon } from './icons.js';
 import { TerminalPanel } from './terminal/TerminalPanel.js';
 
 export const DRAWER_MIN = 280;
+/** The site keeps this much width beside the drawer, or 60% of a very narrow window. */
+const STAGE_MIN = 480;
 
 interface DrawerProps {
   open: boolean;
@@ -31,7 +33,9 @@ export function Drawer({ open, width, onOpen, onResize, onDragging, cwd }: Drawe
   }
 
   const onPointerDown = (event: PointerEvent) => {
-    drag.current = { startX: event.clientX, startWidth: width };
+    // Start from the drawer's on-screen width, which a narrow window may have capped below `width`.
+    const shown = (event.currentTarget as HTMLElement).parentElement?.offsetWidth ?? width;
+    drag.current = { startX: event.clientX, startWidth: shown };
     (event.currentTarget as HTMLElement).setPointerCapture(event.pointerId);
     onDragging(true);
   };
@@ -47,7 +51,7 @@ export function Drawer({ open, width, onOpen, onResize, onDragging, cwd }: Drawe
   };
 
   return (
-    <aside class="g-drawer" style={{ width: `${width}px` }}>
+    <aside class="g-drawer" style={{ width: `min(${width}px, max(40vw, 100vw - ${STAGE_MIN}px))` }}>
       <div
         class="g-drawer-handle"
         role="separator"

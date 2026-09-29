@@ -95,8 +95,8 @@ export function BatchPins({ items, url }: { items: BatchItem[]; url: string }) {
       {items.map((item, i) => {
         if (item.comment.url !== url || item.comment.elements.length === 0) return null;
         const { rect } = anchorFor(item.comment);
-        const x = clamp(rect.x - PIN / 2, 2, vw - PIN - 2);
-        const y = rect.y + rect.h > 0 ? Math.max(2, rect.y - PIN / 2) : rect.y - PIN / 2;
+        const x = clamp(rect.x, 2, vw - PIN - 2);
+        const y = rect.y + rect.h > 0 ? Math.max(2, rect.y) : rect.y;
         return (
           <div
             key={item.key}

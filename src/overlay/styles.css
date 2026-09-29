@@ -125,7 +125,7 @@ button {
   height: 22px;
   padding: 0;
   border: 2px solid #fff;
-  border-radius: 11px 11px 11px 2px;
+  border-radius: 2px 11px 11px 11px;
   box-shadow: 0 1px 4px rgb(0 0 0 / 0.35);
   color: #fff;
   font-size: 11px;
@@ -454,7 +454,7 @@ button {
   flex: none;
   width: 22px;
   height: 22px;
-  border-radius: 11px 11px 11px 2px;
+  border-radius: 2px 11px 11px 11px;
   color: #fff;
   font-size: 11px;
   font-weight: 700;

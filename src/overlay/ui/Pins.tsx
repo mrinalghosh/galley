@@ -1,3 +1,4 @@
+import { useLayoutEffect, useRef, useState } from 'preact/hooks';
 import type { Comment } from '../../shared/protocol.js';
 import { anchorFor, clamp } from '../geometry.js';
 import { Highlight } from './Highlight.js';
@@ -23,10 +24,10 @@ export function Pins({ comments, numbers, openId, hoverId, onOpen, onHover }: Pr
       {comments.map((comment) => {
         const anchor = anchorFor(comment);
         const { rect } = anchor;
-        // Sit on the element's top-left corner, nudged inward at the viewport edge.
-        let x = clamp(rect.x - PIN / 2, 2, vw - PIN - 2);
+        // Tip on the element's top-left corner, nudged inward at the viewport edge.
+        let x = clamp(rect.x, 2, vw - PIN - 2);
         const onScreen = rect.y + rect.h > 0;
-        const y = onScreen ? Math.max(2, rect.y - PIN / 2) : rect.y - PIN / 2;
+        const y = onScreen ? Math.max(2, rect.y) : rect.y;
         // Several comments on one element: fan the pins out to the right.
         while (taken.some((p) => Math.abs(p.x - x) < PIN - 4 && Math.abs(p.y - y) < PIN - 4)) x += PIN - 2;
         taken.push({ x, y });
@@ -57,9 +58,14 @@ export function Pins({ comments, numbers, openId, hoverId, onOpen, onHover }: Pr
 
 function PinCard({ comment, number, x, y }: { comment: Comment; number: number; x: number; y: number }) {
   const width = 260;
+  const card = useRef<HTMLDivElement>(null);
+  // The text sets the height; measure it so a card near the bottom lifts to stay on screen.
+  const [height, setHeight] = useState(0);
+  useLayoutEffect(() => setHeight(card.current?.offsetHeight ?? 0), [comment.text, comment.note]);
   const left = clamp(x + PIN + 6, 8, window.innerWidth - width - 8);
+  const top = clamp(y, 8, window.innerHeight - height - 8);
   return (
-    <div class="pin-card" style={{ transform: `translate(${left}px, ${Math.max(8, y)}px)`, width: `${width}px` }}>
+    <div ref={card} class="pin-card" style={{ transform: `translate(${left}px, ${top}px)`, width: `${width}px` }}>
       <div class="pin-card-head">
         <span class={`dot dot-${comment.status}`} />#{number} · {STATUS_LABEL[comment.status]}
         {comment.target !== 'queue' && <span class="muted"> → {comment.target}</span>}
