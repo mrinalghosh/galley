@@ -1,0 +1,52 @@
+{
+  "name": "galley",
+  "version": "0.1.0",
+  "description": "Mark up a running local site and send the changes to Claude Code.",
+  "license": "MIT",
+  "type": "module",
+  "bin": {
+    "galley": "bin/galley.js"
+  },
+  "exports": {
+    "./vite": {
+      "types": "./dist/vite/index.d.ts",
+      "import": "./dist/vite/index.js"
+    }
+  },
+  "files": [
+    "bin",
+    "dist"
+  ],
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "dev": "node scripts/build.mjs --watch",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "prepare": "node scripts/build.mjs"
+  },
+  "dependencies": {
+    "@babel/parser": "^7.29.9",
+    "@xterm/addon-fit": "^0.11.0",
+    "@xterm/xterm": "^6.0.0",
+    "http-proxy-3": "^2.0.1",
+    "magic-string": "^1.4.2",
+    "modern-screenshot": "^4.7.0",
+    "preact": "^10.29.8",
+    "ws": "^8.22.0"
+  },
+  "devDependencies": {
+    "@types/node": "^26.6.3",
+    "@types/ws": "^8.18.1",
+    "esbuild": "^0.28.2",
+    "playwright": "^1.63.0",
+    "typescript": "^7.0.2",
+    "vite": "^8.3.1",
+    "vitest": "^4.1.11"
+  },
+  "optionalDependencies": {
+    "node-pty": "1.1.0"
+  }
+}
